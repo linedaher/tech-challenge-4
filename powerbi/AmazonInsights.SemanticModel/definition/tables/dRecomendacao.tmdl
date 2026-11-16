@@ -1,0 +1,59 @@
+/// Recomendações por área (lente por área na página 5). Cada linha liga um achado ao número que o sustenta.
+table dRecomendacao
+
+	column Ordem
+		dataType: int64
+		isNameInferred
+		summarizeBy: none
+		sourceColumn: [Ordem]
+
+	column 'Área'
+		dataType: string
+		isNameInferred
+		summarizeBy: none
+		sourceColumn: [Área]
+
+	column Achado
+		dataType: string
+		isNameInferred
+		summarizeBy: none
+		sourceColumn: [Achado]
+
+	column 'Evidência'
+		dataType: string
+		isNameInferred
+		summarizeBy: none
+		sourceColumn: [Evidência]
+
+	column 'Ação recomendada'
+		dataType: string
+		isNameInferred
+		summarizeBy: none
+		sourceColumn: [Ação recomendada]
+
+	partition dRecomendacao = calculated
+		mode: import
+		source =
+				DATATABLE (
+				    "Ordem", INTEGER,
+				    "Área", STRING,
+				    "Achado", STRING,
+				    "Evidência", STRING,
+				    "Ação recomendada", STRING,
+				    {
+				    { 1, "Diretoria", "Engajamento muito concentrado", "10% dos produtos concentram 62% das avaliações", "Proteger os campeões (estoque, preço e qualidade) e monitorar a dependência de poucos itens e marcas" },
+				    { 2, "Pricing", "Desconto alto não compra satisfação", "Com desconto ≥ 80%, 42% dos produtos têm nota < 4; com até 20%, só 17%", "Limitar descontos acima de 60% a produtos com nota ≥ 4 e medir o efeito antes de ampliar" },
+				    { 3, "Pricing", "Em eletrodomésticos, desconto alto acompanha nota baixa", "Correlação desconto × nota de -0,50 em liquidificadores e aquecedores de água e -0,46 em Smart TVs", "Política de desconto por categoria: em eletro, investir em qualidade e garantia em vez de desconto" },
+				    { 4, "Pricing", "% de desconto não move engajamento", "Correlação ≈ 0 entre economia em R$ e avaliações; -0,13 para % de desconto", "Testar outras alavancas (frete, bundle, garantia estendida) no lugar de desconto linear" },
+				    { 5, "Marketing", "Produtos bem avaliados e pouco vistos", "372 produtos 'Oportunidade' (nota ≥ 4,1) com só 3,1% das avaliações", "Campanhas de visibilidade e anúncios patrocinados para esses produtos" },
+				    { 6, "Marketing", "Títulos curtos performam melhor", "Títulos mais curtos: nota 4,15 e cerca de 2× mais avaliações que os mais longos", "Padronizar títulos objetivos, sem excesso de palavras-chave" },
+				    { 7, "Marketing", "Presente é ocasião de compra satisfatória", "Reviews de presente têm 3% de trechos negativos contra 11% na média", "Campanhas de datas comemorativas para smartphones e smartwatches" },
+				    { 8, "Compras", "Marcas com qualidade baixa e recorrente", "Boult: 100% dos produtos com nota < 4; pTron: 87%", "Plano de qualidade com o fornecedor ou substituição; priorizar marcas consistentes (Logitech, SanDisk, TP-Link) e a marca própria (AmazonBasics: 4,29)" },
+				    { 9, "Compras", "Espaços vazios no sortimento", "Air fryers, HDs externos e mouses gamer: nota ≥ 4,38 com apenas 3 a 8 produtos", "Ampliar o sortimento nessas categorias" },
+				    { 10, "Qualidade e Jurídico", "Suspeita de falsificação", "36 produtos com menção a fake/not original; trechos 3× mais negativos (micro SD, cabos, controles)", "Auditar vendedores terceiros dessas categorias" },
+				    { 11, "Qualidade e Jurídico", "Nota alta escondendo problemas", "21 produtos com nota ≥ 4,2 e 3 em cada 8 reviews negativas", "Monitorar o texto das reviews, não só a nota média" },
+				    { 12, "Pós-venda", "Defeitos precoces", "Metade das falhas relatadas ocorre no 1º mês; cabos USB lideram", "Inspeção de lote nos fornecedores críticos e troca expressa no 1º mês" },
+				    { 13, "Pós-venda", "Fones de ouvido: maior risco do portfólio", "Subcategoria com pior nota (3,92) e 52% dos produtos abaixo de 4", "Revisar o sortimento de fones e reforçar o suporte pós-venda" },
+				    { 14, "Pós-venda", "Produtos caros geram dúvidas de instalação", "Instalação citada em 15% das reviews dos produtos caros contra 6% nos baratos", "Oferecer serviço de instalação ou conteúdo de onboarding nos itens de maior valor" }
+				    }
+				)

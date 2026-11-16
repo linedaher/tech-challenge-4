@@ -1,0 +1,23 @@
+/// Ponte trecho x tema (um trecho pode citar vários temas).
+table fReviewTema
+
+	column trecho_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: trecho_id
+
+	column tema
+		dataType: string
+		summarizeBy: none
+		sourceColumn: tema
+
+	partition fReviewTema = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaDados & "fReviewTema.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"trecho_id", type text}, {"tema", type text}})
+				in
+				    Tipos

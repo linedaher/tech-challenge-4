@@ -1,0 +1,233 @@
+/// Produtos tratados (1 linha por product_id). Tratamento completo no Power Query, passos comentados.
+table dProduto
+
+	column product_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column product_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: product_name
+
+	column categoria
+		dataType: string
+		summarizeBy: none
+		sourceColumn: categoria
+
+	column subcategoria
+		dataType: string
+		summarizeBy: none
+		sourceColumn: subcategoria
+
+	column categoria_folha
+		dataType: string
+		summarizeBy: none
+		sourceColumn: categoria_folha
+
+	column marca
+		dataType: string
+		summarizeBy: none
+		sourceColumn: marca
+
+	column preco_original_inr
+		dataType: double
+		formatString: #,##0
+		isHidden
+		summarizeBy: none
+		sourceColumn: preco_original_inr
+
+	column preco_desconto_inr
+		dataType: double
+		formatString: #,##0
+		isHidden
+		summarizeBy: none
+		sourceColumn: preco_desconto_inr
+
+	column preco_original_brl
+		dataType: double
+		formatString: "R$" #,##0.00
+		summarizeBy: none
+		sourceColumn: preco_original_brl
+
+	column preco_desconto_brl
+		dataType: double
+		formatString: "R$" #,##0.00
+		summarizeBy: none
+		sourceColumn: preco_desconto_brl
+
+	column economia_brl
+		dataType: double
+		formatString: "R$" #,##0.00
+		summarizeBy: none
+		sourceColumn: economia_brl
+
+	column desconto_pct
+		dataType: double
+		formatString: 0%
+		summarizeBy: none
+		sourceColumn: desconto_pct
+
+	column rating
+		dataType: double
+		formatString: 0.0
+		summarizeBy: none
+		sourceColumn: rating
+
+	column qtd_avaliacoes
+		dataType: double
+		formatString: #,##0
+		summarizeBy: none
+		sourceColumn: qtd_avaliacoes
+
+	column flag_sem_avaliacao
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: flag_sem_avaliacao
+
+	column grupo_avaliacao
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: grupo_avaliacao
+
+	column faixa_desconto
+		dataType: string
+		summarizeBy: none
+		sourceColumn: faixa_desconto
+		sortByColumn: faixa_desconto_ordem
+
+	column faixa_desconto_ordem
+		dataType: int64
+		formatString: 0
+		isHidden
+		summarizeBy: none
+		sourceColumn: faixa_desconto_ordem
+
+	column faixa_preco
+		dataType: string
+		summarizeBy: none
+		sourceColumn: faixa_preco
+		sortByColumn: faixa_preco_ordem
+
+	column faixa_preco_ordem
+		dataType: int64
+		formatString: 0
+		isHidden
+		summarizeBy: none
+		sourceColumn: faixa_preco_ordem
+
+	column quadrante
+		dataType: string
+		summarizeBy: none
+		sourceColumn: quadrante
+
+	column tamanho_titulo
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: tamanho_titulo
+
+	column about_product
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: about_product
+
+	column img_link
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: img_link
+
+	column product_link
+		dataType: string
+		summarizeBy: none
+		sourceColumn: product_link
+
+	partition dProduto = m
+		mode: import
+		source =
+				let
+				    // 1. Leitura do CSV bruto do Kaggle (UTF-8; textos com virgula vem entre aspas)
+				    Fonte = Csv.Document(File.Contents(PastaDados & "amazon.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
+				    Colunas = Table.SelectColumns(Cabecalhos, {"product_id", "product_name", "category", "discounted_price", "actual_price", "discount_percentage", "rating", "rating_count", "about_product", "img_link", "product_link"}),
+
+				    // 2. Texto -> numero: remove "₹", "," e "%" e le no padrao en-US (ponto decimal).
+				    //    Valores invalidos (ex.: rating "|", rating_count vazio) viram null.
+				    ParaNumero = (t as nullable text) as nullable number => try Number.FromText(Text.Remove(t, {"₹", ",", "%"}), "en-US") otherwise null,
+				    Numeros = Table.TransformColumns(Colunas, {
+				        {"actual_price", ParaNumero, type nullable number},
+				        {"discounted_price", ParaNumero, type nullable number},
+				        {"discount_percentage", each ParaNumero(_) / 100, type nullable number},
+				        {"rating", ParaNumero, type nullable number},
+				        {"rating_count", ParaNumero, type nullable number}}),
+				    Renomeado = Table.RenameColumns(Numeros, {
+				        {"actual_price", "preco_original_inr"}, {"discounted_price", "preco_desconto_inr"},
+				        {"discount_percentage", "desconto_pct"}, {"rating_count", "qtd_avaliacoes"}}),
+
+				    // 3. Duplicados: o mesmo produto foi coletado 2x (114 linhas). Fica o registro com mais avaliacoes.
+				    Ordenado = Table.Buffer(Table.Sort(Renomeado, {{"qtd_avaliacoes", Order.Descending}})),
+				    SemDuplicados = Table.Distinct(Ordenado, {"product_id"}),
+
+				    // 4. Sem nota ou sem contagem: fica marcado e sai das analises de satisfacao/engajamento
+				    FlagSemAvaliacao = Table.AddColumn(SemDuplicados, "flag_sem_avaliacao", each [rating] = null or [qtd_avaliacoes] = null, type logical),
+
+				    // 5. Conversao para R$ (parametro CotacaoINRBRL)
+				    PrecoOriginalBRL = Table.AddColumn(FlagSemAvaliacao, "preco_original_brl", each Number.Round([preco_original_inr] * CotacaoINRBRL, 2), type number),
+				    PrecoDescontoBRL = Table.AddColumn(PrecoOriginalBRL, "preco_desconto_brl", each Number.Round([preco_desconto_inr] * CotacaoINRBRL, 2), type number),
+				    EconomiaBRL = Table.AddColumn(PrecoDescontoBRL, "economia_brl", each [preco_original_brl] - [preco_desconto_brl], type number),
+
+				    // 6. Hierarquia de categoria: "A|B|...|Folha" -> categoria (traduzida), subcategoria e folha
+				    Traducao = [Electronics = "Eletrônicos", #"Computers&Accessories" = "Informática e Acessórios", #"Home&Kitchen" = "Casa e Cozinha", OfficeProducts = "Escritório"],
+				    SepararCamel = (t as nullable text) as nullable text =>
+				        if t = null then null else
+				        let
+				            comE = Text.Replace(t, "&", " & "),
+				            partes = Splitter.SplitTextByCharacterTransition({"a".."z"}, {"A".."Z"})(comE),
+				            junto = Text.Combine(partes, " ")
+				        in
+				            Text.Combine(List.Select(Text.Split(junto, " "), each _ <> ""), " "),
+				    Niveis = Table.AddColumn(EconomiaBRL, "niveis", each Text.Split([category], "|")),
+				    Categoria = Table.AddColumn(Niveis, "categoria", each Record.FieldOrDefault(Traducao, [niveis]{0}, "Outros"), type text),
+				    Subcategoria = Table.AddColumn(Categoria, "subcategoria", each SepararCamel([niveis]{1}?), type text),
+				    Folha = Table.AddColumn(Subcategoria, "categoria_folha", each SepararCamel(List.Last([niveis])), type text),
+
+				    // 7. Marca = 1a palavra do nome. Variantes (cor/modelo) compartilham nota e contagem na Amazon:
+				    //    mesma marca + mesma nota + mesma contagem = mesmo grupo, somado 1x na medida [Avaliações].
+				    Marca = Table.AddColumn(Folha, "marca", each Text.Select(Text.Lower(Text.BeforeDelimiter(Text.Trim([product_name]), " ")), {"a".."z", "0".."9"}), type text),
+				    GrupoAvaliacao = Table.AddColumn(Marca, "grupo_avaliacao", each
+				        if [flag_sem_avaliacao] then [product_id]
+				        else Text.Lower(Text.BeforeDelimiter(Text.Trim([product_name]), " ")) & "|" & Number.ToText([rating], "G", "en-US") & "|" & Number.ToText([qtd_avaliacoes], "G", "en-US"), type text),
+
+				    // 8. Faixas de desconto (com coluna de ordem para os graficos)
+				    FaixaDesconto = Table.AddColumn(GrupoAvaliacao, "faixa_desconto", each
+				        if [desconto_pct] <= 0.2 then "0-20%" else if [desconto_pct] <= 0.4 then "20-40%"
+				        else if [desconto_pct] <= 0.6 then "40-60%" else if [desconto_pct] <= 0.8 then "60-80%" else "80%+", type text),
+				    FaixaDescontoOrdem = Table.AddColumn(FaixaDesconto, "faixa_desconto_ordem", each
+				        List.PositionOf({"0-20%", "20-40%", "40-60%", "60-80%", "80%+"}, [faixa_desconto]) + 1, Int64.Type),
+
+				    // 9. Quartis de preco e quadrantes, calculados so sobre produtos com avaliacao valida
+				    Validos = Table.SelectRows(FaixaDescontoOrdem, each not [flag_sem_avaliacao]),
+				    Quartis = List.Percentile(Validos[preco_desconto_brl], {0.25, 0.5, 0.75}, [PercentileMode = PercentileMode.ExcelInc]),
+				    FaixaPreco = Table.AddColumn(FaixaDescontoOrdem, "faixa_preco", each
+				        if [preco_desconto_brl] <= Quartis{0} then "Q1 (mais baratos)" else if [preco_desconto_brl] <= Quartis{1} then "Q2"
+				        else if [preco_desconto_brl] <= Quartis{2} then "Q3" else "Q4 (mais caros)", type text),
+				    FaixaPrecoOrdem = Table.AddColumn(FaixaPreco, "faixa_preco_ordem", each Number.From(Text.Middle([faixa_preco], 1, 1)), Int64.Type),
+				    MedianaAvaliacoes = List.Median(Validos[qtd_avaliacoes]),
+				    MedianaNota = List.Median(Validos[rating]),
+				    Quadrante = Table.AddColumn(FaixaPrecoOrdem, "quadrante", each
+				        if [flag_sem_avaliacao] then "Sem avaliação"
+				        else if [qtd_avaliacoes] >= MedianaAvaliacoes and [rating] >= MedianaNota then "Estrela"
+				        else if [qtd_avaliacoes] >= MedianaAvaliacoes then "Risco"
+				        else if [rating] >= MedianaNota then "Oportunidade"
+				        else "Revisar", type text),
+
+				    // 10. Tamanho do titulo (lente de Marketing)
+				    TamanhoTitulo = Table.AddColumn(Quadrante, "tamanho_titulo", each Text.Length([product_name]), Int64.Type),
+
+				    Final = Table.RemoveColumns(TamanhoTitulo, {"niveis", "category"})
+				in
+				    Final

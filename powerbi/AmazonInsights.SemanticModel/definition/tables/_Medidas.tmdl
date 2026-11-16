@@ -1,0 +1,143 @@
+/// Tabela só de medidas (organizadas em pastas por tema).
+table _Medidas
+
+	/// Produtos únicos após remover duplicados.
+	measure 'Produtos' = COUNTROWS ( dProduto )
+		formatString: #,##0
+		displayFolder: Portfólio
+
+	/// Produtos com nota e quantidade de avaliações válidas.
+	measure 'Produtos Avaliados' = CALCULATE ( COUNTROWS ( dProduto ), dProduto[flag_sem_avaliacao] = FALSE () )
+		formatString: #,##0
+		displayFolder: Portfólio
+
+	/// Total de avaliações contando cada grupo de variantes uma única vez (variantes compartilham avaliações na Amazon).
+	measure 'Avaliações' =
+			CALCULATE (
+			    SUMX ( VALUES ( dProduto[grupo_avaliacao] ), CALCULATE ( MAX ( dProduto[qtd_avaliacoes] ) ) ),
+			    dProduto[flag_sem_avaliacao] = FALSE ()
+			)
+		formatString: #,##0
+		displayFolder: Engajamento
+
+	/// Participação no total de avaliações da seleção.
+	measure '% das Avaliações' = DIVIDE ( [Avaliações], CALCULATE ( [Avaliações], ALLSELECTED ( dProduto ) ) )
+		formatString: 0.0%
+		displayFolder: Engajamento
+
+	/// Mediana de avaliações por produto: menos sensível aos campeões de venda que a média.
+	measure 'Avaliações por Produto (mediana)' = CALCULATE ( MEDIAN ( dProduto[qtd_avaliacoes] ), dProduto[flag_sem_avaliacao] = FALSE () )
+		formatString: #,##0
+		displayFolder: Engajamento
+
+	/// Média simples da nota (1 a 5).
+	measure 'Nota Média' = AVERAGE ( dProduto[rating] )
+		formatString: 0.00
+		displayFolder: Satisfação
+
+	/// Parcela de produtos com nota menor que 4: o limiar em que o cliente percebe o produto como mediano.
+	measure '% Produtos Abaixo de 4' =
+			DIVIDE (
+			    CALCULATE ( COUNTROWS ( dProduto ), dProduto[rating] < 4, dProduto[flag_sem_avaliacao] = FALSE () ),
+			    [Produtos Avaliados]
+			)
+		formatString: 0.0%
+		displayFolder: Satisfação
+
+	/// Média bayesiana (fórmula IMDb): produtos com poucas avaliações são puxados para a média geral, evitando que nota 5 com 2 avaliações lidere rankings.
+	measure 'Nota Ponderada' =
+			VAR C = CALCULATE ( AVERAGE ( dProduto[rating] ), ALL ( dProduto ) )
+			VAR m = CALCULATE ( PERCENTILE.INC ( dProduto[qtd_avaliacoes], 0.25 ), ALL ( dProduto ), dProduto[flag_sem_avaliacao] = FALSE () )
+			RETURN
+			    AVERAGEX (
+			        FILTER ( dProduto, NOT dProduto[flag_sem_avaliacao] ),
+			        DIVIDE ( dProduto[qtd_avaliacoes], dProduto[qtd_avaliacoes] + m ) * dProduto[rating]
+			            + DIVIDE ( m, dProduto[qtd_avaliacoes] + m ) * C
+			    )
+		formatString: 0.00
+		displayFolder: Satisfação
+
+	/// Média do percentual de desconto.
+	measure 'Desconto Médio' = AVERAGE ( dProduto[desconto_pct] )
+		formatString: 0.0%
+		displayFolder: Preço e Desconto
+
+	/// Mediana do preço com desconto, convertido de ₹ para R$ pela cotação do parâmetro CotacaoINRBRL.
+	measure 'Preço Mediano (R$)' = MEDIAN ( dProduto[preco_desconto_brl] )
+		formatString: "R$" #,##0.00
+		displayFolder: Preço e Desconto
+
+	measure 'Preço Médio Original (R$)' = AVERAGE ( dProduto[preco_original_brl] )
+		formatString: "R$" #,##0.00
+		displayFolder: Preço e Desconto
+
+	measure 'Preço Médio com Desconto (R$)' = AVERAGE ( dProduto[preco_desconto_brl] )
+		formatString: "R$" #,##0.00
+		displayFolder: Preço e Desconto
+
+	/// Diferença média em reais entre preço original e preço com desconto.
+	measure 'Economia Média (R$)' = AVERAGE ( dProduto[economia_brl] )
+		formatString: "R$" #,##0.00
+		displayFolder: Preço e Desconto
+
+	/// Trechos de review analisados (até 8 reviews por produto na fonte).
+	measure 'Trechos de Review' = COUNTROWS ( fReview )
+		formatString: #,##0
+		displayFolder: Customer Insights
+
+	measure '% Trechos Positivos' = DIVIDE ( CALCULATE ( COUNTROWS ( fReview ), fReview[sentimento] = "Positivo" ), [Trechos de Review] )
+		formatString: 0.0%
+		displayFolder: Customer Insights
+
+	measure '% Trechos Negativos' = DIVIDE ( CALCULATE ( COUNTROWS ( fReview ), fReview[sentimento] = "Negativo" ), [Trechos de Review] )
+		formatString: 0.0%
+		displayFolder: Customer Insights
+
+	/// Score VADER médio (-1 muito negativo a +1 muito positivo).
+	measure 'Sentimento Médio' = AVERAGE ( fReview[sentimento_score] )
+		formatString: 0.00
+		displayFolder: Customer Insights
+
+	/// Trechos que citam o tema.
+	measure 'Menções' = COUNTROWS ( fReviewTema )
+		formatString: #,##0
+		displayFolder: Customer Insights
+
+	/// Entre os trechos que citam o tema, quantos são negativos.
+	measure '% Negativo do Tema' = DIVIDE ( CALCULATE ( [Menções], fReview[sentimento] = "Negativo" ), [Menções] )
+		formatString: 0.0%
+		displayFolder: Customer Insights
+
+	/// Frequência do tema: menções / todos os trechos.
+	measure '% dos Trechos que Citam' = DIVIDE ( [Menções], CALCULATE ( [Trechos de Review], REMOVEFILTERS ( fReviewTema ) ) )
+		formatString: 0.0%
+		displayFolder: Customer Insights
+
+	/// Produtos com review citando fake / not original / used. Triagem: requer leitura manual.
+	measure 'Produtos com Suspeita de Falsificação' = CALCULATE ( DISTINCTCOUNT ( fReview[product_id] ), fReview[sinal_falsificacao] = TRUE () )
+		formatString: #,##0
+		displayFolder: Riscos
+
+	/// Produtos com review citando faísca, choque, superaquecimento ou fumaça. Triagem: requer leitura manual.
+	measure 'Produtos com Alerta de Segurança' = CALCULATE ( DISTINCTCOUNT ( fReview[product_id] ), fReview[sinal_seguranca] = TRUE () )
+		formatString: #,##0
+		displayFolder: Riscos
+
+	/// Trechos que relatam defeito informando o tempo de uso (ex.: stopped working after 2 months).
+	measure 'Falhas Relatadas' = CALCULATE ( COUNTROWS ( fReview ), NOT ISBLANK ( fReview[dias_ate_falha] ) )
+		formatString: #,##0
+		displayFolder: Riscos
+
+	measure '% Falhas no 1º Mês' = DIVIDE ( CALCULATE ( [Falhas Relatadas], fReview[dias_ate_falha] <= 30 ), [Falhas Relatadas] )
+		formatString: 0.0%
+		displayFolder: Riscos
+
+	column Coluna
+		dataType: string
+		isHidden
+		isNameInferred
+		sourceColumn: [Coluna]
+
+	partition _Medidas = calculated
+		mode: import
+		source = ROW ( "Coluna", "" )

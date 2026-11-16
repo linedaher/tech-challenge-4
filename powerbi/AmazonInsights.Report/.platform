@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "AmazonInsights"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "4416ee98-f3c0-5413-bc48-f506525f559b"
+  }
+}

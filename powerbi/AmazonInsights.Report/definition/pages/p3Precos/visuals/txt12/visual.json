@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "txt12",
+  "position": {
+    "x": 640,
+    "y": 578,
+    "z": 12000,
+    "height": 132,
+    "width": 620,
+    "tabOrder": 12000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "• Correlação % desconto × avaliações: -0,13; economia em R$ × avaliações: ≈ 0.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Na mesma categoria: desconto × nota = -0,50 (liquidificadores, aquecedores de água), -0,46 (Smart TV).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Hipótese testada e não confirmada: preço original inflado para simular desconto (19 casos, sem efeito).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

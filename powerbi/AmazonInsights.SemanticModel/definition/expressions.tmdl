@@ -1,0 +1,5 @@
+/// Pasta com amazon.csv, fReview.csv e fReviewTema.csv (terminar com \)
+expression PastaDados = "C:\TechChallenge4\dados\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+
+/// Cotação ₹ -> R$: PTAX USD/BRL (BCB, 13/11/2026: 5,6518) x INR/USD (BCE, 13/11/2026: 0,010611)
+expression CotacaoINRBRL = 0.05997 meta [IsParameterQuery=true, Type="Number", IsParameterQueryRequired=true]

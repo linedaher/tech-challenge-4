@@ -1,0 +1,70 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "txt04",
+  "position": {
+    "x": 20,
+    "y": 560,
+    "z": 4000,
+    "height": 150,
+    "width": 1240,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "O que a liderança deve levar desta análise",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#232F3E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "1. Desconto não é alavanca de satisfação nem de engajamento: rever a política por categoria.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#232F3E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "2. Visibilidade está desalinhada com qualidade: há 372 produtos bem avaliados e pouco vistos.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#232F3E"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "3. O texto das reviews revela riscos que a nota esconde: defeitos no 1º mês, falsificação e marcas recorrentes.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#232F3E"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "txt11",
+  "position": {
+    "x": 20,
+    "y": 465,
+    "z": 11000,
+    "height": 140,
+    "width": 1000,
+    "tabOrder": 11000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Mensagens-chave",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Engajamento concentrado: 10% dos produtos = 62% das avaliações.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Desconto alto não compra satisfação: com desconto ≥ 80%, 42% dos produtos têm nota < 4 (contra 17% com até 20%).",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• 372 produtos bem avaliados recebem só 3,1% das avaliações: oportunidade de visibilidade.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Fones de ouvido: maior risco (pior nota e alto volume).",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,92 @@
+/// Trechos de review com sentimento VADER e sinais de risco (gerado em Python).
+table fReview
+
+	column trecho_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: trecho_id
+
+	column product_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column texto
+		dataType: string
+		summarizeBy: none
+		sourceColumn: texto
+
+	column sentimento_score
+		dataType: double
+		formatString: 0.00
+		summarizeBy: none
+		sourceColumn: sentimento_score
+
+	column sentimento
+		dataType: string
+		summarizeBy: none
+		sourceColumn: sentimento
+
+	column qtd_palavras
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: qtd_palavras
+
+	column sinal_falsificacao
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: sinal_falsificacao
+
+	column sinal_seguranca
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: sinal_seguranca
+
+	column sinal_presente
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: sinal_presente
+
+	column sinal_concorrente
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: sinal_concorrente
+
+	column dias_ate_falha
+		dataType: double
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: dias_ate_falha
+
+	column faixa_tempo_falha
+		dataType: string
+		summarizeBy: none
+		sourceColumn: faixa_tempo_falha
+
+	partition fReview = m
+		mode: import
+		source =
+				let
+				    // Trechos de review com sentimento (VADER) e sinais de texto, gerados por scripts/01_tratamento.py
+				    Fonte = Csv.Document(File.Contents(PastaDados & "fReview.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
+				    Logicos = Table.TransformColumns(Cabecalhos, {
+				        {"sinal_falsificacao", each _ = "True", type logical},
+				        {"sinal_seguranca", each _ = "True", type logical},
+				        {"sinal_presente", each _ = "True", type logical},
+				        {"sinal_concorrente", each _ = "True", type logical}}),
+				    VazioParaNull = Table.ReplaceValue(Logicos, "", null, Replacer.ReplaceValue, {"dias_ate_falha"}),
+				    Tipos = Table.TransformColumnTypes(VazioParaNull, {
+				        {"trecho_id", type text}, {"product_id", type text}, {"texto", type text},
+				        {"sentimento_score", type number}, {"sentimento", type text}, {"qtd_palavras", Int64.Type},
+				        {"dias_ate_falha", type number}}, "en-US"),
+				    FaixaFalha = Table.AddColumn(Tipos, "faixa_tempo_falha", each
+				        if [dias_ate_falha] = null then null
+				        else if [dias_ate_falha] <= 7 then "1. Até 1 semana" else if [dias_ate_falha] <= 30 then "2. Até 1 mês"
+				        else if [dias_ate_falha] <= 90 then "3. 1 a 3 meses" else if [dias_ate_falha] <= 180 then "4. 3 a 6 meses"
+				        else if [dias_ate_falha] <= 365 then "5. 6 a 12 meses" else "6. Mais de 1 ano", type text)
+				in
+				    FaixaFalha
