@@ -1,0 +1,5 @@
+tamanho_descricao,produtos,nota_media,pct_abaixo_4,avaliacoes_mediana,desconto_medio
+Q1 curto,338,4.095,0.266,3811.0,0.401
+Q2,337,4.094,0.228,6558.0,0.422
+Q3,337,4.082,0.285,7333.0,0.517
+Q4 longo,336,4.096,0.226,3528.5,0.527

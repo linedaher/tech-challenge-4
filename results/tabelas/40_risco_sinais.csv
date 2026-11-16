@@ -1,0 +1,5 @@
+sinal,trechos,produtos,pct_negativo,pct_negativo_base,principais_categorias
+falsificacao,40,36,0.325,0.105,"Micro SD, USBCables, Remote Controls"
+seguranca,55,49,0.109,0.105,"Smartphones, Electric Kettles, Mixer Grinders"
+presente,58,56,0.034,0.105,"Smartphones, Smart Watches, USBCables"
+concorrente,181,165,0.133,0.105,"USBCables, Smartphones, Smart Televisions"
