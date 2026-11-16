@@ -1,0 +1,7 @@
+pandas>=2.2,<3
+numpy
+kagglehub~=1.0
+vaderSentiment~=3.3
+matplotlib
+jupyterlab>=4
+ipykernel
