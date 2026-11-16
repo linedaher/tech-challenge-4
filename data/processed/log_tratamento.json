@@ -1,0 +1,14 @@
+{
+  "linhas_raw": 1465,
+  "produtos_unicos_raw": 1351,
+  "rating_invalido": 1,
+  "qtd_avaliacoes_nula": 2,
+  "duplicados_removidos": 114,
+  "produtos_sem_avaliacao": 3,
+  "produtos_em_grupo_de_variantes": 241,
+  "grupos_de_avaliacao": 1203,
+  "desconto_divergente_>1pp": 0,
+  "produtos_final": 1351,
+  "trechos_review": 10295,
+  "trechos_com_tema": 5799
+}
