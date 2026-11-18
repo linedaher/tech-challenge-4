@@ -1,63 +1,120 @@
 # Amazon Product Performance & Customer Insights
 
-**Tech Challenge Fase 4 — Pós Tech FIAP (DTAT).** Solução analítica em Power BI para
-apoiar decisões de portfólio e experiência do cliente de um e-commerce, investigando a
-cadeia **Preço → Desconto → Engajamento → Satisfação**.
+**Tech Challenge Fase 4 · Pós Tech FIAP (DTAT).** Dashboard em Power BI que ajuda um e-commerce
+a decidir **quais produtos, categorias e estratégias comerciais merecem atenção**.
 
-> Pergunta central: quais produtos, categorias e estratégias comerciais merecem maior
-> atenção, e quais oportunidades os dados revelam?
+## Índice
 
-## Dataset
+1. [O problema](#o-problema)
+2. [Dados](#dados)
+3. [Solução](#solução)
+4. [Principais achados](#principais-achados)
+5. [Como usar](#como-usar)
+6. [Como reproduzir os dados](#como-reproduzir-os-dados)
+7. [Estrutura do repositório](#estrutura-do-repositório)
+8. [Limitações](#limitações)
 
-[Amazon Sales Dataset](https://www.kaggle.com/datasets/karkavelrajaj/amazon-sales-dataset)
-(Kaggle, `karkavelrajaj/amazon-sales-dataset`): 1.465 linhas, preços em rúpias (₹),
-nota, quantidade de avaliações e até 8 reviews por produto. **Não tem vendas nem datas**:
-engajamento = quantidade de avaliações (`rating_count`).
+## O problema
 
-## Tratamento (o que a base exigiu)
+O catálogo tem muitos produtos com descontos agressivos, e não fica claro se o desconto traz
+engajamento ou só reduz margem e satisfação. O projeto investiga a cadeia
+**Preço → Desconto → Engajamento → Satisfação** e lê as reviews para entender o que o cliente
+elogia e critica.
 
-| Problema encontrado | Tratamento |
+> Pergunta central: quais produtos, categorias e estratégias comerciais merecem maior atenção, e
+> quais oportunidades os dados revelam?
+
+## Dados
+
+[Amazon Sales Dataset](https://www.kaggle.com/datasets/karkavelrajaj/amazon-sales-dataset) (Kaggle).
+São 1.465 linhas, com preços em rúpias, nota, quantidade de avaliações e até 8 reviews por
+produto. A base **não tem vendas nem datas**, então o engajamento é medido pela quantidade de
+avaliações.
+
+| Problema na base | Tratamento |
 |---|---|
-| 114 linhas duplicadas (mesmo produto coletado 2×) | Fica o registro com mais avaliações → **1.351 produtos** |
-| Preço `₹1,099`, desconto `"64%"`, contagem `"24,269"` | Convertidos para número; preços em R$ (cotação 0,05997, PTAX USD × BCE INR, 13/11/2026) |
-| 1 nota inválida (`|`), 2 contagens nulas | 3 produtos marcados e fora das análises de nota/engajamento |
-| **Variantes compartilham avaliações** (241 produtos em 93 grupos) | Somas de engajamento contam cada grupo 1× — sem isso o total infla 27% |
-| Categoria hierárquica `A|B|…|Folha` | Categoria (traduzida), subcategoria e categoria folha |
-| Reviews concatenadas por vírgula, com vírgulas no texto | Separadas por `,` sem espaço; URLs removidas → 10.295 trechos |
+| 114 linhas duplicadas | Fica o registro com mais avaliações → **1.351 produtos** |
+| Textos como `₹1,099`, `"64%"`, `"24,269"` | Convertidos para número; preços em R$ (cotação 0,05997) |
+| 1 nota inválida e 2 contagens nulas | 3 produtos fora das análises de nota e engajamento |
+| Variantes compartilham avaliações (93 grupos) | Cada grupo conta 1×; sem isso o total infla 27% |
+| Categoria hierárquica `A\|B\|…\|Folha` | Categoria (traduzida), subcategoria e folha |
+| Reviews concatenadas | Separadas em 10.295 trechos |
 
-Customer Insights: sentimento com **VADER** (reviews em inglês), 10 **temas** por
-palavra-chave e **sinais de risco** no texto (falsificação, segurança, tempo até o defeito).
+Nas reviews são aplicados sentimento **VADER**, 10 **temas** por palavra-chave e **sinais de risco**
+(falsificação, segurança e tempo até o defeito).
 
-## Estrutura
+## Solução
 
-```
-src/                 regras de negócio (limpeza, reviews, análises) — única fonte de verdade
-scripts/00_download_kaggle.py   baixa a base (usa ~/.kaggle/kaggle.json)
-scripts/01_tratamento.py        gera data/processed/ (produtos, reviews, temas, log)
-scripts/03_gerar_pbip.py        gera o projeto Power BI (TMDL + PBIR) em powerbi/
-notebooks/02_analises.ipynb     perguntas do desafio + lentes por área (executado)
-results/tabelas/                21 tabelas exportadas pelo notebook
-powerbi/                        projeto PBIP + dados/ → abrir no Power BI Desktop
-docs/guia_powerbi.md            passo a passo no Windows + números esperados para validação
-```
+O relatório tem 5 páginas, com menu lateral de navegação e filtros:
 
-## Como reproduzir
+| Página | Responde |
+|---|---|
+| 1. Visão Executiva | Como está o portfólio e onde estão os riscos? |
+| 2. Produtos e Categorias | Quais produtos, subcategorias e marcas merecem atenção? |
+| 3. Preços e Estratégia Comercial | O desconto funciona? |
+| 4. Insights de Clientes | O que o cliente valoriza e critica? |
+| 5. Recomendações | O que fazer, filtrável por área (Pricing, Marketing, Compras, Risco, CX)? |
+
+Os produtos são classificados em quadrantes de **engajamento × nota**: Estrela, Oportunidade,
+Revisar e Risco.
+
+## Principais achados
+
+- **Concentração:** 10% dos produtos têm 62% das avaliações, e os produtos Estrela somam 74,7%.
+- **Desconto alto não compra satisfação:** a parcela de produtos com nota abaixo de 4 sobe de 16,6%
+  (desconto de 0 a 20%) para 42% (acima de 80%).
+- **Desconto alto também não traz mais engajamento:** a mediana de avaliações cai de cerca de 7 mil
+  (até 40% de desconto) para 3 a 4 mil (acima de 40%).
+- **Qualidade precoce:** 48,8% das falhas relatadas acontecem no primeiro mês de uso.
+- **Riscos para triagem:** 36 produtos com suspeita de falsificação e 49 com alerta de segurança
+  nas reviews.
+
+## Como usar
+
+**Requisito:** Power BI Desktop atualizado (Windows).
+
+1. Baixe ou clone o repositório.
+2. Abra `powerbi/AmazonInsights.pbip` no Power BI Desktop.
+3. Se aparecer erro de fonte de dados, vá em **Página Inicial → Transformar dados → Editar
+   parâmetros** e informe em `PastaDados` o caminho da pasta `powerbi\dados\`, **terminando com `\`**.
+4. Clique em **Atualizar**.
+5. Para navegar pelo menu lateral no Desktop, use **Ctrl + clique** nos botões. No serviço do Power BI
+   ou no `.pbix` publicado, basta um clique.
+
+Para gerar o `.pbix`, use **Arquivo → Salvar como → Arquivo do Power BI (.pbix)**.
+
+Os números esperados para validação estão em [`docs/guia_powerbi.md`](docs/guia_powerbi.md).
+
+## Como reproduzir os dados
+
+Opcional, pois os dados tratados já estão no repositório. Requer Python 3.
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-.venv/bin/python scripts/00_download_kaggle.py
-.venv/bin/python scripts/01_tratamento.py
-(cd notebooks && ../.venv/bin/jupyter nbconvert --to notebook --execute --inplace 02_analises.ipynb)
-.venv/bin/python scripts/03_gerar_pbip.py
+python -m venv .venv
+.venv\Scripts\pip install -r requirements.txt
+.venv\Scripts\python scripts/00_download_kaggle.py
+.venv\Scripts\python scripts/01_tratamento.py
+.venv\Scripts\jupyter nbconvert --to notebook --execute --inplace notebooks/02_analises.ipynb
 ```
 
-Depois, no Windows, siga [`docs/guia_powerbi.md`](docs/guia_powerbi.md).
+> `scripts/03_gerar_pbip.py` recria o projeto Power BI do zero, com o layout original. Não rode
+> esse script se quiser manter o visual atual do relatório.
+
+## Estrutura do repositório
+
+```
+src/                       regras de negócio (limpeza, reviews, análises)
+scripts/                   download da base, tratamento e gerador do PBIP
+notebooks/02_analises.ipynb  perguntas do desafio e lentes por área
+data/processed/            produtos, reviews e temas tratados
+results/tabelas/           tabelas exportadas pelo notebook
+powerbi/                   projeto Power BI (.pbip) e pasta dados/
+docs/guia_powerbi.md       passo a passo e números de validação
+```
 
 ## Limitações
 
-- Engajamento é proxy (avaliações), não venda. Sem datas: não há análise temporal.
-- Até 8 reviews por produto e sem nota individual: o sentimento concorda moderadamente
-  com a nota (correlação de Spearman 0,33). Temas e sinais de risco são busca por padrão,
-  com falso positivo — servem para triagem e leitura manual.
-- Correlações não implicam causa (ex.: preço terminado em 9 tem mais avaliações, mas
-  grandes marcas usam mais esse padrão).
+- O engajamento é medido por avaliações, não por vendas. Sem datas, não há análise temporal.
+- Há no máximo 8 reviews por produto, sem nota individual. Temas e sinais de risco são busca por
+  padrão e têm falsos positivos, então servem para triagem.
+- Correlação não implica causa.
