@@ -152,7 +152,7 @@ table _Medidas
 		displayFolder: Riscos
 		lineageTag: 5f7a2030-37df-4361-a0ff-f1e03de01a8b
 
-	measure '% Falhas no 1º Mês' = DIVIDE ( CALCULATE ( [Falhas Relatadas], fReview[dias_ate_falha] <= 30 ), [Falhas Relatadas] )
+	measure '% Falhas no 1º Mês' = DIVIDE ( CALCULATE ( [Falhas Relatadas], fReview[faixa_tempo_falha] IN { "1. Até 1 semana", "2. Até 1 mês" } ), [Falhas Relatadas] )
 		formatString: 0.0%
 		displayFolder: Riscos
 		lineageTag: c0e89e7e-b8d2-47d2-85e9-6f5689b81f8c

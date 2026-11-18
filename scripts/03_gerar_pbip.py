@@ -249,7 +249,10 @@ MEDIDAS = [
      "CALCULATE ( COUNTROWS ( fReview ), NOT ISBLANK ( fReview[dias_ate_falha] ) )", "#,##0",
      "Trechos que relatam defeito informando o tempo de uso (ex.: stopped working after 2 months)."),
     ("Riscos", "% Falhas no 1º Mês",
-     "DIVIDE ( CALCULATE ( [Falhas Relatadas], fReview[dias_ate_falha] <= 30 ), [Falhas Relatadas] )", "0.0%", None),
+     "DIVIDE ( CALCULATE ( [Falhas Relatadas], fReview[faixa_tempo_falha] IN { \"1. Até 1 semana\", \"2. Até 1 mês\" } ), "
+     "[Falhas Relatadas] )", "0.0%",
+     "Falhas relatadas em até 30 dias de uso (mesmas faixas do gráfico 'Quando o defeito aparece'). "
+     "Filtrar dias_ate_falha aqui daria 100%: [Falhas Relatadas] já filtra essa coluna e sobrescreveria o filtro."),
 ]
 
 # Recomendacoes (pagina 5): area, achado, evidencia, acao
