@@ -1,68 +1,81 @@
 /// Trechos de review com sentimento VADER e sinais de risco (gerado em Python).
 table fReview
+	lineageTag: 5aed6084-8a2b-41a8-b38b-b993bcd8ed94
 
 	column trecho_id
 		dataType: string
 		isHidden
+		lineageTag: 37c86be3-1b74-496d-bee1-30e517f8d708
 		summarizeBy: none
 		sourceColumn: trecho_id
 
 	column product_id
 		dataType: string
 		isHidden
+		lineageTag: 9ae23938-6f4e-442b-a12c-b1322fff2e3b
 		summarizeBy: none
 		sourceColumn: product_id
 
 	column texto
 		dataType: string
+		lineageTag: 74e431c2-c6ed-492c-b6de-67ddc7206691
 		summarizeBy: none
 		sourceColumn: texto
 
 	column sentimento_score
 		dataType: double
 		formatString: 0.00
+		lineageTag: ceed21d8-53ee-4cd2-b15f-471a6f3b97b0
 		summarizeBy: none
 		sourceColumn: sentimento_score
 
 	column sentimento
 		dataType: string
+		lineageTag: 0de6b66a-2355-4b47-8762-2c1aa1124456
 		summarizeBy: none
 		sourceColumn: sentimento
 
 	column qtd_palavras
 		dataType: int64
 		formatString: 0
+		lineageTag: af9513af-847b-44d3-bda2-d4d4b708d64a
 		summarizeBy: none
 		sourceColumn: qtd_palavras
 
 	column sinal_falsificacao
 		dataType: boolean
+		lineageTag: fb1e6891-e241-44bc-9616-51e76acc60d7
 		summarizeBy: none
 		sourceColumn: sinal_falsificacao
 
 	column sinal_seguranca
 		dataType: boolean
+		lineageTag: 6328613f-47d7-4018-a9ca-48bb295f5109
 		summarizeBy: none
 		sourceColumn: sinal_seguranca
 
 	column sinal_presente
 		dataType: boolean
+		lineageTag: 5b20ff86-0de4-4c92-9151-2323de42c5e5
 		summarizeBy: none
 		sourceColumn: sinal_presente
 
 	column sinal_concorrente
 		dataType: boolean
+		lineageTag: 4414b04b-27e4-4143-ab6c-52806ce1e0a7
 		summarizeBy: none
 		sourceColumn: sinal_concorrente
 
 	column dias_ate_falha
 		dataType: double
 		formatString: 0
+		lineageTag: 1bd12086-d9b5-43c8-8e40-3591a53e6f63
 		summarizeBy: none
 		sourceColumn: dias_ate_falha
 
 	column faixa_tempo_falha
 		dataType: string
+		lineageTag: 14dea369-5f19-41ee-9039-490ee83e2784
 		summarizeBy: none
 		sourceColumn: faixa_tempo_falha
 
@@ -90,3 +103,6 @@ table fReview
 				        else if [dias_ate_falha] <= 365 then "5. 6 a 12 meses" else "6. Mais de 1 ano", type text)
 				in
 				    FaixaFalha
+
+	annotation PBI_ResultType = Table
+

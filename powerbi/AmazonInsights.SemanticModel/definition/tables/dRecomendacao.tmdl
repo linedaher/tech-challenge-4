@@ -1,34 +1,40 @@
 /// Recomendações por área (lente por área na página 5). Cada linha liga um achado ao número que o sustenta.
 table dRecomendacao
+	lineageTag: d5f06254-d38b-4bc1-8b55-ad21764cd738
 
 	column Ordem
 		dataType: int64
-		isNameInferred
+		lineageTag: 1bd19f62-5099-4920-8d06-03b634738e07
 		summarizeBy: none
+		isNameInferred
 		sourceColumn: [Ordem]
 
-	column 'Área'
+	column Área
 		dataType: string
-		isNameInferred
+		lineageTag: 8dd3b7e0-dd37-4f2c-8d68-94abe38743a5
 		summarizeBy: none
+		isNameInferred
 		sourceColumn: [Área]
 
 	column Achado
 		dataType: string
-		isNameInferred
+		lineageTag: 9926de8b-01e3-4249-a183-52b82edfd0ae
 		summarizeBy: none
+		isNameInferred
 		sourceColumn: [Achado]
 
-	column 'Evidência'
+	column Evidência
 		dataType: string
-		isNameInferred
+		lineageTag: 735bec99-5fdd-48af-8284-764b12deef29
 		summarizeBy: none
+		isNameInferred
 		sourceColumn: [Evidência]
 
 	column 'Ação recomendada'
 		dataType: string
-		isNameInferred
+		lineageTag: ed4bd8ad-ced1-4fcb-b782-50ecf695f54d
 		summarizeBy: none
+		isNameInferred
 		sourceColumn: [Ação recomendada]
 
 	partition dRecomendacao = calculated
@@ -57,3 +63,4 @@ table dRecomendacao
 				    { 14, "Pós-venda", "Produtos caros geram dúvidas de instalação", "Instalação citada em 15% das reviews dos produtos caros contra 6% nos baratos", "Oferecer serviço de instalação ou conteúdo de onboarding nos itens de maior valor" }
 				    }
 				)
+

@@ -1,5 +1,16 @@
 /// Pasta com amazon.csv, fReview.csv e fReviewTema.csv (terminar com \)
-expression PastaDados = "C:\TechChallenge4\dados\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+expression PastaDados = "C:\Users\Aline\Documents\tech-challenge-4-main\powerbi\dados\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 5ac6aaae-6af5-44a0-9eb3-d33ab3cf3c78
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Text
 
 /// Cotação ₹ -> R$: PTAX USD/BRL (BCB, 13/11/2026: 5,6518) x INR/USD (BCE, 13/11/2026: 0,010611)
 expression CotacaoINRBRL = 0.05997 meta [IsParameterQuery=true, Type="Number", IsParameterQueryRequired=true]
+	lineageTag: 1c0026ef-0293-4846-ac0c-700c30333337
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Number
+

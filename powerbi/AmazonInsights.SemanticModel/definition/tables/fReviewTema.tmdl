@@ -1,14 +1,17 @@
 /// Ponte trecho x tema (um trecho pode citar vários temas).
 table fReviewTema
+	lineageTag: cc9a4f3e-78cd-4f0e-8a1b-072b5afe5bb1
 
 	column trecho_id
 		dataType: string
 		isHidden
+		lineageTag: 4129707f-988f-41a4-8036-1b4c89dc6ee2
 		summarizeBy: none
 		sourceColumn: trecho_id
 
 	column tema
 		dataType: string
+		lineageTag: 82778c0d-ba9a-463a-b323-fdfedd62d418
 		summarizeBy: none
 		sourceColumn: tema
 
@@ -21,3 +24,6 @@ table fReviewTema
 				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"trecho_id", type text}, {"tema", type text}})
 				in
 				    Tipos
+
+	annotation PBI_ResultType = Table
+

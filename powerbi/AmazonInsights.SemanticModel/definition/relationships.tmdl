@@ -6,3 +6,4 @@ relationship ca22cbc0-a252-5287-8140-303abb8f40cb
 	crossFilteringBehavior: bothDirections
 	fromColumn: fReviewTema.trecho_id
 	toColumn: fReview.trecho_id
+

@@ -1,39 +1,46 @@
 /// Tabela só de medidas (organizadas em pastas por tema).
 table _Medidas
+	lineageTag: 3722f61e-7925-4d01-b468-2d96b3b2dabb
 
 	/// Produtos únicos após remover duplicados.
-	measure 'Produtos' = COUNTROWS ( dProduto )
+	measure Produtos = COUNTROWS ( dProduto )
 		formatString: #,##0
 		displayFolder: Portfólio
+		lineageTag: 4422adcc-4afd-4679-b844-1d8e3da97286
 
 	/// Produtos com nota e quantidade de avaliações válidas.
 	measure 'Produtos Avaliados' = CALCULATE ( COUNTROWS ( dProduto ), dProduto[flag_sem_avaliacao] = FALSE () )
 		formatString: #,##0
 		displayFolder: Portfólio
+		lineageTag: ac2768e2-0feb-45a3-8fde-8492ba605a08
 
 	/// Total de avaliações contando cada grupo de variantes uma única vez (variantes compartilham avaliações na Amazon).
-	measure 'Avaliações' =
+	measure Avaliações =
 			CALCULATE (
 			    SUMX ( VALUES ( dProduto[grupo_avaliacao] ), CALCULATE ( MAX ( dProduto[qtd_avaliacoes] ) ) ),
 			    dProduto[flag_sem_avaliacao] = FALSE ()
 			)
 		formatString: #,##0
 		displayFolder: Engajamento
+		lineageTag: 3c03cc4b-0b7e-497d-91d8-2d7a05186263
 
 	/// Participação no total de avaliações da seleção.
 	measure '% das Avaliações' = DIVIDE ( [Avaliações], CALCULATE ( [Avaliações], ALLSELECTED ( dProduto ) ) )
 		formatString: 0.0%
 		displayFolder: Engajamento
+		lineageTag: db5ed9d4-d9f7-466b-b80c-293e0e4c4c4b
 
 	/// Mediana de avaliações por produto: menos sensível aos campeões de venda que a média.
 	measure 'Avaliações por Produto (mediana)' = CALCULATE ( MEDIAN ( dProduto[qtd_avaliacoes] ), dProduto[flag_sem_avaliacao] = FALSE () )
 		formatString: #,##0
 		displayFolder: Engajamento
+		lineageTag: 75b45a8c-2508-4891-8c60-e7b346d23ab2
 
 	/// Média simples da nota (1 a 5).
 	measure 'Nota Média' = AVERAGE ( dProduto[rating] )
 		formatString: 0.00
 		displayFolder: Satisfação
+		lineageTag: bb8e8a99-cd71-4b9b-addf-4a3830c4ca98
 
 	/// Parcela de produtos com nota menor que 4: o limiar em que o cliente percebe o produto como mediano.
 	measure '% Produtos Abaixo de 4' =
@@ -43,6 +50,7 @@ table _Medidas
 			)
 		formatString: 0.0%
 		displayFolder: Satisfação
+		lineageTag: 68327252-b564-431b-a726-99afd83c5f51
 
 	/// Média bayesiana (fórmula IMDb): produtos com poucas avaliações são puxados para a média geral, evitando que nota 5 com 2 avaliações lidere rankings.
 	measure 'Nota Ponderada' =
@@ -56,88 +64,107 @@ table _Medidas
 			    )
 		formatString: 0.00
 		displayFolder: Satisfação
+		lineageTag: 3d0ecd4d-eebc-4e28-807a-9e29b7efa2d6
 
 	/// Média do percentual de desconto.
 	measure 'Desconto Médio' = AVERAGE ( dProduto[desconto_pct] )
 		formatString: 0.0%
 		displayFolder: Preço e Desconto
+		lineageTag: f66f9806-7484-4fd9-b350-f5dd0d59a7b5
 
 	/// Mediana do preço com desconto, convertido de ₹ para R$ pela cotação do parâmetro CotacaoINRBRL.
 	measure 'Preço Mediano (R$)' = MEDIAN ( dProduto[preco_desconto_brl] )
 		formatString: "R$" #,##0.00
 		displayFolder: Preço e Desconto
+		lineageTag: bbc4a89f-1170-41ea-a8ee-47046066d791
 
 	measure 'Preço Médio Original (R$)' = AVERAGE ( dProduto[preco_original_brl] )
 		formatString: "R$" #,##0.00
 		displayFolder: Preço e Desconto
+		lineageTag: 9c581c6d-0f5f-43a5-8acb-70ae4c827b1b
 
 	measure 'Preço Médio com Desconto (R$)' = AVERAGE ( dProduto[preco_desconto_brl] )
 		formatString: "R$" #,##0.00
 		displayFolder: Preço e Desconto
+		lineageTag: 43424c01-9313-406f-9fbd-39545f8be21d
 
 	/// Diferença média em reais entre preço original e preço com desconto.
 	measure 'Economia Média (R$)' = AVERAGE ( dProduto[economia_brl] )
 		formatString: "R$" #,##0.00
 		displayFolder: Preço e Desconto
+		lineageTag: a464bfa8-a04e-4970-a47c-eb4caed9371b
 
 	/// Trechos de review analisados (até 8 reviews por produto na fonte).
 	measure 'Trechos de Review' = COUNTROWS ( fReview )
 		formatString: #,##0
 		displayFolder: Customer Insights
+		lineageTag: 6f8fc55c-5cc2-41c2-a4fe-fb24c7729926
 
 	measure '% Trechos Positivos' = DIVIDE ( CALCULATE ( COUNTROWS ( fReview ), fReview[sentimento] = "Positivo" ), [Trechos de Review] )
 		formatString: 0.0%
 		displayFolder: Customer Insights
+		lineageTag: b9f528b0-f82b-4021-9807-464ae50fd31e
 
 	measure '% Trechos Negativos' = DIVIDE ( CALCULATE ( COUNTROWS ( fReview ), fReview[sentimento] = "Negativo" ), [Trechos de Review] )
 		formatString: 0.0%
 		displayFolder: Customer Insights
+		lineageTag: 3d3281cb-1ad6-43a1-8cb5-d7c7e6422dd2
 
 	/// Score VADER médio (-1 muito negativo a +1 muito positivo).
 	measure 'Sentimento Médio' = AVERAGE ( fReview[sentimento_score] )
 		formatString: 0.00
 		displayFolder: Customer Insights
+		lineageTag: a78e195d-7f19-4b70-b864-0de08f96545a
 
 	/// Trechos que citam o tema.
-	measure 'Menções' = COUNTROWS ( fReviewTema )
+	measure Menções = COUNTROWS ( fReviewTema )
 		formatString: #,##0
 		displayFolder: Customer Insights
+		lineageTag: 6b6d1316-3103-4478-81db-d878ca32f772
 
 	/// Entre os trechos que citam o tema, quantos são negativos.
 	measure '% Negativo do Tema' = DIVIDE ( CALCULATE ( [Menções], fReview[sentimento] = "Negativo" ), [Menções] )
 		formatString: 0.0%
 		displayFolder: Customer Insights
+		lineageTag: 453e92fb-7ff5-4a50-8882-8cd5f1a2f426
 
 	/// Frequência do tema: menções / todos os trechos.
 	measure '% dos Trechos que Citam' = DIVIDE ( [Menções], CALCULATE ( [Trechos de Review], REMOVEFILTERS ( fReviewTema ) ) )
 		formatString: 0.0%
 		displayFolder: Customer Insights
+		lineageTag: 862a9e6b-399f-4a0a-93e8-eeaa62da0cd6
 
 	/// Produtos com review citando fake / not original / used. Triagem: requer leitura manual.
 	measure 'Produtos com Suspeita de Falsificação' = CALCULATE ( DISTINCTCOUNT ( fReview[product_id] ), fReview[sinal_falsificacao] = TRUE () )
 		formatString: #,##0
 		displayFolder: Riscos
+		lineageTag: 200a60a9-5a25-4bce-bf4f-170414a23afe
 
 	/// Produtos com review citando faísca, choque, superaquecimento ou fumaça. Triagem: requer leitura manual.
 	measure 'Produtos com Alerta de Segurança' = CALCULATE ( DISTINCTCOUNT ( fReview[product_id] ), fReview[sinal_seguranca] = TRUE () )
 		formatString: #,##0
 		displayFolder: Riscos
+		lineageTag: 24369344-28a4-49ba-aefc-35f6b6af196a
 
 	/// Trechos que relatam defeito informando o tempo de uso (ex.: stopped working after 2 months).
 	measure 'Falhas Relatadas' = CALCULATE ( COUNTROWS ( fReview ), NOT ISBLANK ( fReview[dias_ate_falha] ) )
 		formatString: #,##0
 		displayFolder: Riscos
+		lineageTag: 5f7a2030-37df-4361-a0ff-f1e03de01a8b
 
 	measure '% Falhas no 1º Mês' = DIVIDE ( CALCULATE ( [Falhas Relatadas], fReview[dias_ate_falha] <= 30 ), [Falhas Relatadas] )
 		formatString: 0.0%
 		displayFolder: Riscos
+		lineageTag: c0e89e7e-b8d2-47d2-85e9-6f5689b81f8c
 
 	column Coluna
 		dataType: string
 		isHidden
+		lineageTag: a8e3fc4f-585d-432a-b41d-2436c2de23e6
 		isNameInferred
 		sourceColumn: [Coluna]
 
 	partition _Medidas = calculated
 		mode: import
 		source = ROW ( "Coluna", "" )
+

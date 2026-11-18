@@ -1,148 +1,174 @@
 /// Produtos tratados (1 linha por product_id). Tratamento completo no Power Query, passos comentados.
 table dProduto
+	lineageTag: d2b81ab7-3988-4b8c-8083-64aa7961966c
 
 	column product_id
 		dataType: string
+		lineageTag: e729dfd9-fa41-4ab0-8d4d-b4cdfa19eaf3
 		summarizeBy: none
 		sourceColumn: product_id
 
 	column product_name
 		dataType: string
+		lineageTag: 71b0d230-1dd2-43a6-873d-bd965e476069
 		summarizeBy: none
 		sourceColumn: product_name
 
 	column categoria
 		dataType: string
+		lineageTag: eab3bb76-ed88-4238-aa34-51886383b7f6
 		summarizeBy: none
 		sourceColumn: categoria
 
 	column subcategoria
 		dataType: string
+		lineageTag: d548a7e9-1cd0-4976-a4a9-325a263c61e4
 		summarizeBy: none
 		sourceColumn: subcategoria
 
 	column categoria_folha
 		dataType: string
+		lineageTag: 6dd6ca71-faa6-4c5a-8950-4c90fd3089ba
 		summarizeBy: none
 		sourceColumn: categoria_folha
 
 	column marca
 		dataType: string
+		lineageTag: 6c8aa547-f47c-4e1c-b2fe-3ebda346553c
 		summarizeBy: none
 		sourceColumn: marca
 
 	column preco_original_inr
 		dataType: double
-		formatString: #,##0
 		isHidden
+		formatString: #,##0
+		lineageTag: 89b83c44-9952-4a22-80e3-289f8d62cbf9
 		summarizeBy: none
 		sourceColumn: preco_original_inr
 
 	column preco_desconto_inr
 		dataType: double
-		formatString: #,##0
 		isHidden
+		formatString: #,##0
+		lineageTag: ccd1e477-4051-4246-b2df-fa00d41604da
 		summarizeBy: none
 		sourceColumn: preco_desconto_inr
 
 	column preco_original_brl
 		dataType: double
 		formatString: "R$" #,##0.00
+		lineageTag: 183bf0fd-ab98-4fb3-80ac-8560cce87c8b
 		summarizeBy: none
 		sourceColumn: preco_original_brl
 
 	column preco_desconto_brl
 		dataType: double
 		formatString: "R$" #,##0.00
+		lineageTag: 2adf779f-0fc4-40fd-9aad-0626551cfa36
 		summarizeBy: none
 		sourceColumn: preco_desconto_brl
 
 	column economia_brl
 		dataType: double
 		formatString: "R$" #,##0.00
+		lineageTag: c337ec24-9f08-4b5e-a314-f26c3f861db6
 		summarizeBy: none
 		sourceColumn: economia_brl
 
 	column desconto_pct
 		dataType: double
 		formatString: 0%
+		lineageTag: 0d9f4185-720e-44f3-bca4-59f9da1cafc6
 		summarizeBy: none
 		sourceColumn: desconto_pct
 
 	column rating
 		dataType: double
 		formatString: 0.0
+		lineageTag: e06ec93e-50d8-4466-b70e-2a855bfef7bd
 		summarizeBy: none
 		sourceColumn: rating
 
 	column qtd_avaliacoes
 		dataType: double
 		formatString: #,##0
+		lineageTag: 28946aa3-d418-4b25-8629-6dfd191d64d1
 		summarizeBy: none
 		sourceColumn: qtd_avaliacoes
 
 	column flag_sem_avaliacao
 		dataType: boolean
+		lineageTag: 8ec3d434-35c6-42b1-8cca-12c53858cd3a
 		summarizeBy: none
 		sourceColumn: flag_sem_avaliacao
 
 	column grupo_avaliacao
 		dataType: string
 		isHidden
+		lineageTag: ab8f1186-6aea-4f86-bac2-6d8d268badba
 		summarizeBy: none
 		sourceColumn: grupo_avaliacao
 
 	column faixa_desconto
 		dataType: string
+		lineageTag: 6fd5c354-0955-4dc7-8bff-45b106a54701
 		summarizeBy: none
 		sourceColumn: faixa_desconto
 		sortByColumn: faixa_desconto_ordem
 
 	column faixa_desconto_ordem
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
+		lineageTag: 0e7ab9bc-b799-45af-a0dc-91b7a3497d12
 		summarizeBy: none
 		sourceColumn: faixa_desconto_ordem
 
 	column faixa_preco
 		dataType: string
+		lineageTag: 8ca7bd2e-bbd7-4370-a1fb-aee0438fc38d
 		summarizeBy: none
 		sourceColumn: faixa_preco
 		sortByColumn: faixa_preco_ordem
 
 	column faixa_preco_ordem
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
+		lineageTag: b4f6fa8c-1376-44d7-863d-d99afcec9fae
 		summarizeBy: none
 		sourceColumn: faixa_preco_ordem
 
 	column quadrante
 		dataType: string
+		lineageTag: c287844a-2ac8-425c-8880-1bf0520a6d78
 		summarizeBy: none
 		sourceColumn: quadrante
 
 	column tamanho_titulo
 		dataType: int64
 		formatString: 0
+		lineageTag: a107c934-d9b1-4684-9e58-b2bf92337191
 		summarizeBy: none
 		sourceColumn: tamanho_titulo
 
 	column about_product
 		dataType: string
 		isHidden
+		lineageTag: 1f22eb27-8cb3-4517-8303-ae92b542895f
 		summarizeBy: none
 		sourceColumn: about_product
 
 	column img_link
 		dataType: string
 		isHidden
+		lineageTag: c0c522d3-11cb-44e8-b0e0-84273c7f452a
 		summarizeBy: none
 		sourceColumn: img_link
 
 	column product_link
 		dataType: string
+		lineageTag: 3107bf6e-6f15-484a-ab83-807625b7a267
 		summarizeBy: none
 		sourceColumn: product_link
 
@@ -154,7 +180,7 @@ table dProduto
 				    Fonte = Csv.Document(File.Contents(PastaDados & "amazon.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
 				    Cabecalhos = Table.PromoteHeaders(Fonte, [PromoteAllScalars = true]),
 				    Colunas = Table.SelectColumns(Cabecalhos, {"product_id", "product_name", "category", "discounted_price", "actual_price", "discount_percentage", "rating", "rating_count", "about_product", "img_link", "product_link"}),
-
+				
 				    // 2. Texto -> numero: remove "₹", "," e "%" e le no padrao en-US (ponto decimal).
 				    //    Valores invalidos (ex.: rating "|", rating_count vazio) viram null.
 				    ParaNumero = (t as nullable text) as nullable number => try Number.FromText(Text.Remove(t, {"₹", ",", "%"}), "en-US") otherwise null,
@@ -167,19 +193,19 @@ table dProduto
 				    Renomeado = Table.RenameColumns(Numeros, {
 				        {"actual_price", "preco_original_inr"}, {"discounted_price", "preco_desconto_inr"},
 				        {"discount_percentage", "desconto_pct"}, {"rating_count", "qtd_avaliacoes"}}),
-
+				
 				    // 3. Duplicados: o mesmo produto foi coletado 2x (114 linhas). Fica o registro com mais avaliacoes.
 				    Ordenado = Table.Buffer(Table.Sort(Renomeado, {{"qtd_avaliacoes", Order.Descending}})),
 				    SemDuplicados = Table.Distinct(Ordenado, {"product_id"}),
-
+				
 				    // 4. Sem nota ou sem contagem: fica marcado e sai das analises de satisfacao/engajamento
 				    FlagSemAvaliacao = Table.AddColumn(SemDuplicados, "flag_sem_avaliacao", each [rating] = null or [qtd_avaliacoes] = null, type logical),
-
+				
 				    // 5. Conversao para R$ (parametro CotacaoINRBRL)
 				    PrecoOriginalBRL = Table.AddColumn(FlagSemAvaliacao, "preco_original_brl", each Number.Round([preco_original_inr] * CotacaoINRBRL, 2), type number),
 				    PrecoDescontoBRL = Table.AddColumn(PrecoOriginalBRL, "preco_desconto_brl", each Number.Round([preco_desconto_inr] * CotacaoINRBRL, 2), type number),
 				    EconomiaBRL = Table.AddColumn(PrecoDescontoBRL, "economia_brl", each [preco_original_brl] - [preco_desconto_brl], type number),
-
+				
 				    // 6. Hierarquia de categoria: "A|B|...|Folha" -> categoria (traduzida), subcategoria e folha
 				    Traducao = [Electronics = "Eletrônicos", #"Computers&Accessories" = "Informática e Acessórios", #"Home&Kitchen" = "Casa e Cozinha", OfficeProducts = "Escritório"],
 				    SepararCamel = (t as nullable text) as nullable text =>
@@ -194,21 +220,21 @@ table dProduto
 				    Categoria = Table.AddColumn(Niveis, "categoria", each Record.FieldOrDefault(Traducao, [niveis]{0}, "Outros"), type text),
 				    Subcategoria = Table.AddColumn(Categoria, "subcategoria", each SepararCamel([niveis]{1}?), type text),
 				    Folha = Table.AddColumn(Subcategoria, "categoria_folha", each SepararCamel(List.Last([niveis])), type text),
-
+				
 				    // 7. Marca = 1a palavra do nome. Variantes (cor/modelo) compartilham nota e contagem na Amazon:
 				    //    mesma marca + mesma nota + mesma contagem = mesmo grupo, somado 1x na medida [Avaliações].
 				    Marca = Table.AddColumn(Folha, "marca", each Text.Select(Text.Lower(Text.BeforeDelimiter(Text.Trim([product_name]), " ")), {"a".."z", "0".."9"}), type text),
 				    GrupoAvaliacao = Table.AddColumn(Marca, "grupo_avaliacao", each
 				        if [flag_sem_avaliacao] then [product_id]
 				        else Text.Lower(Text.BeforeDelimiter(Text.Trim([product_name]), " ")) & "|" & Number.ToText([rating], "G", "en-US") & "|" & Number.ToText([qtd_avaliacoes], "G", "en-US"), type text),
-
+				
 				    // 8. Faixas de desconto (com coluna de ordem para os graficos)
 				    FaixaDesconto = Table.AddColumn(GrupoAvaliacao, "faixa_desconto", each
 				        if [desconto_pct] <= 0.2 then "0-20%" else if [desconto_pct] <= 0.4 then "20-40%"
 				        else if [desconto_pct] <= 0.6 then "40-60%" else if [desconto_pct] <= 0.8 then "60-80%" else "80%+", type text),
 				    FaixaDescontoOrdem = Table.AddColumn(FaixaDesconto, "faixa_desconto_ordem", each
 				        List.PositionOf({"0-20%", "20-40%", "40-60%", "60-80%", "80%+"}, [faixa_desconto]) + 1, Int64.Type),
-
+				
 				    // 9. Quartis de preco e quadrantes, calculados so sobre produtos com avaliacao valida
 				    Validos = Table.SelectRows(FaixaDescontoOrdem, each not [flag_sem_avaliacao]),
 				    Quartis = List.Percentile(Validos[preco_desconto_brl], {0.25, 0.5, 0.75}, [PercentileMode = PercentileMode.ExcelInc]),
@@ -224,10 +250,15 @@ table dProduto
 				        else if [qtd_avaliacoes] >= MedianaAvaliacoes then "Risco"
 				        else if [rating] >= MedianaNota then "Oportunidade"
 				        else "Revisar", type text),
-
+				
 				    // 10. Tamanho do titulo (lente de Marketing)
 				    TamanhoTitulo = Table.AddColumn(Quadrante, "tamanho_titulo", each Text.Length([product_name]), Int64.Type),
-
+				
 				    Final = Table.RemoveColumns(TamanhoTitulo, {"niveis", "category"})
 				in
 				    Final
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

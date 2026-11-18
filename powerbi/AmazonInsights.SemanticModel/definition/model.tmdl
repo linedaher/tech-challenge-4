@@ -7,8 +7,15 @@ model Model
 		legacyRedirects
 		returnErrorValuesAsNull
 
+annotation PBI_QueryOrder = ["dProduto","fReview","fReviewTema","PastaDados","CotacaoINRBRL"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
 ref table dProduto
 ref table fReview
 ref table fReviewTema
 ref table dRecomendacao
 ref table _Medidas
+
+ref cultureInfo pt-BR
+
