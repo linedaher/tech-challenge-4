@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "v08clusteredB",
   "position": {
-    "x": 20,
-    "y": 190,
+    "x": 250,
+    "y": 188,
     "z": 8000,
-    "height": 260,
-    "width": 410,
+    "height": 320,
+    "width": 330,
     "tabOrder": 8000
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "dProduto.categoria",
-              "nativeQueryRef": "categoria"
+              "nativeQueryRef": "categoria",
+              "active": true
             }
           ]
         },
@@ -65,11 +66,9 @@
             },
             "direction": "Descending"
           }
-        ],
-        "isDefaultSort": false
+        ]
       }
     },
-    "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
         {
@@ -98,6 +97,39 @@
           }
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "b29a923d9a6027407d01",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dProduto"
+              }
+            },
+            "Property": "categoria"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "31111f97bad25192d8e2",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Avaliações"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }

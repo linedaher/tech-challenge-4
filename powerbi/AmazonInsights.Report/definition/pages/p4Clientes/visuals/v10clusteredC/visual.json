@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "v10clusteredC",
   "position": {
-    "x": 960,
-    "y": 165,
+    "x": 985,
+    "y": 188,
     "z": 10000,
-    "height": 300,
-    "width": 300,
+    "height": 270,
+    "width": 275,
     "tabOrder": 10000
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "fReview.faixa_tempo_falha",
-              "nativeQueryRef": "faixa_tempo_falha"
+              "nativeQueryRef": "faixa_tempo_falha",
+              "active": true
             }
           ]
         },
@@ -65,11 +66,9 @@
             },
             "direction": "Ascending"
           }
-        ],
-        "isDefaultSort": false
+        ]
       }
     },
-    "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
         {
@@ -98,6 +97,7 @@
           }
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

@@ -1,8 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/1.4.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
   "name": "p4Clientes",
-  "displayName": "4. Customer Insights",
+  "displayName": "4. Insights de Clientes",
   "displayOption": "FitToPage",
   "height": 720,
-  "width": 1280
+  "width": 1280,
+  "pageBinding": {
+    "name": "7ba092057ce95d0a6364",
+    "type": "Default",
+    "parameters": []
+  }
 }

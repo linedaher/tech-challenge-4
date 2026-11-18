@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
   "name": "v03card",
   "position": {
-    "x": 227,
-    "y": 80,
+    "x": 424,
+    "y": 92,
     "z": 3000,
-    "height": 95,
-    "width": 195,
+    "height": 74,
+    "width": 156,
     "tabOrder": 3000
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "_Medidas.Avaliações",
-              "nativeQueryRef": "Avaliações"
+              "nativeQueryRef": "Avaliações",
+              "displayName": "Avaliações (sem variantes)"
             }
           ]
         }
@@ -41,7 +42,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             }
@@ -56,7 +57,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },

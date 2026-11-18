@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "v10scatterCha",
   "position": {
-    "x": 20,
-    "y": 435,
+    "x": 250,
+    "y": 455,
     "z": 10000,
-    "height": 275,
-    "width": 610,
+    "height": 255,
+    "width": 500,
     "tabOrder": 10000
   },
   "visual": {
@@ -27,43 +27,8 @@
                 }
               },
               "queryRef": "dProduto.categoria_folha",
-              "nativeQueryRef": "categoria_folha"
-            }
-          ]
-        },
-        "X": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Medidas"
-                    }
-                  },
-                  "Property": "Desconto Médio"
-                }
-              },
-              "queryRef": "_Medidas.Desconto Médio",
-              "nativeQueryRef": "Desconto Médio"
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Medidas"
-                    }
-                  },
-                  "Property": "Nota Média"
-                }
-              },
-              "queryRef": "_Medidas.Nota Média",
-              "nativeQueryRef": "Nota Média"
+              "nativeQueryRef": "categoria_folha",
+              "active": true
             }
           ]
         },
@@ -84,10 +49,46 @@
               "nativeQueryRef": "Produtos"
             }
           ]
+        },
+        "X": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Desconto Médio"
+                }
+              },
+              "queryRef": "_Medidas.Desconto Médio",
+              "nativeQueryRef": "Desconto Médio",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Nota Média"
+                }
+              },
+              "queryRef": "_Medidas.Nota Média",
+              "nativeQueryRef": "Nota Média"
+            }
+          ]
         }
       }
     },
-    "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
         {
@@ -116,6 +117,7 @@
           }
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }
